@@ -10,6 +10,15 @@ function ratesAverage(movies) {
   return Number(average.toFixed(2));
 }
 
+//-----------
+
+function ratesAverage(movies) {
+  var total = movies.reduce((acc, curr) => Number(acc) + Number(curr.rate), 0);
+
+  var average = total / movies.length;
+  return Number(average.toFixed(2));
+}
+
 // Get the average of Drama Movies
 function dramaMoviesRate(movies) {
   var dramas = movies.filter(function(oneMovie) {
@@ -23,6 +32,17 @@ function dramaMoviesRate(movies) {
   return ratesAverage(dramas);
 }
 
+//-----------
+
+function dramaMoviesRate(movies) {
+  var dramas = movies.filter(oneMovie => oneMovie.genre.indexOf("Drama") === 0);
+
+  if (dramas.length === 0) {
+    return undefined;
+  }
+
+  return ratesAverage(dramas);
+}
 // Order by time duration, in growing order
 function orderByDuration(movies) {
   var timeSorted = movies.sort(function(a, b) {
@@ -32,6 +52,16 @@ function orderByDuration(movies) {
 
     return a.duration - b.duration;
   });
+  return timeSorted;
+}
+
+//-----------
+function orderByDuration(movies) {
+  var timeSorted = movies.sort((a, b) =>
+    a.duration === b.duration
+      ? a.title.localeCompare(b.title)
+      : a.duration - b.duration
+  );
   return timeSorted;
 }
 
@@ -47,6 +77,21 @@ function howManyMovies(movies) {
       oneMovie.director === "Steven Spielberg"
     );
   });
+  return "Steven Spielberg directed " + filtered.length + " drama movies!";
+  // return `Steven Spielberg directed ${filtered.length} drama movies!"`;
+}
+
+//-----------
+
+function howManyMovies(movies) {
+  if (movies.length === 0) {
+    return undefined;
+  }
+  var filtered = movies.filter(
+    oneMovie =>
+      oneMovie.genre.includes("Drama") &&
+      oneMovie.director === "Steven Spielberg"
+  );
   return "Steven Spielberg directed " + filtered.length + " drama movies!";
   // return `Steven Spielberg directed ${filtered.length} drama movies!"`;
 }
@@ -70,4 +115,20 @@ function orderAlphabetically(movies) {
   return top20;
 }
 
+//-----------
+function orderAlphabetically(movies) {
+  var sorted = movies.sort((a, b) => a.title - b.title);
+
+  var top20 = [];
+  var limit = 20;
+
+  if (sorted.length < 20) {
+    limit = sorted.length;
+  }
+
+  for (var i = 0; i < limit; i++) {
+    top20.push(sorted[i].title);
+  }
+  return top20;
+}
 // Best yearly rate average
